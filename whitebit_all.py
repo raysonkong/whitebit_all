@@ -13,7 +13,7 @@ SLEEP_TIME = 0.2
 # ## setup config_cmc.py in the same folder
 # ##
 
-# EXCHANGES=["MEXC"]  # only one
+# EXCHANGES=["WHITEBIT"]  # only one
 
 # WANTED_CURRENCIES = ['USDT']  # only one
 
@@ -22,7 +22,10 @@ SLEEP_TIME = 0.2
 # # Group size is the max number of coins per each .txt file (output)
 # GROUP_SIZE = len(EXCHANGES) * 1000
 
-# URL = 'https://www.mexc.com/open/api/v2/market/ticker'
+# URL = 'https://whitebit.com/api/v4/public/markets'
+# ## end of Config file
+
+
 # ## end of Config file
 
 
@@ -47,16 +50,22 @@ current_time = time.strftime("%H:%M:%S", t)
 
 
 response = requests.get(URL)
-#print(response.json())
 
-coins = response.json()['data']
+callResult = response.json()
+
+coins = []
+
+for coin in callResult:
+    coins.append(coin['name'])
 
 #print(coins)
 
+
+
 result = []
 for coin in coins:
-    if coin['symbol'][-len(WANTED_CURRENCIES[0]):] == WANTED_CURRENCIES[0]:
-        result.append(EXCHANGES[0] + ":" + coin['symbol'].replace('_', ''))
+    if coin[-len(WANTED_CURRENCIES[0]):] == WANTED_CURRENCIES[0]:
+        result.append(EXCHANGES[0] + ":" + coin.replace('_', ''))
 
 #print(result)
 
@@ -112,7 +121,7 @@ def run_srapper():
     output_to_text_file(grouped_pairs)
 
 
-    print("== MEXC All Tickers Retrieved ==")
+    print("== Whitebit All Tickers Retrieved ==")
     print('\n')
     #print("======================================================")
 if __name__ =='__main__':
